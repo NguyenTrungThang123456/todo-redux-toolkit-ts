@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { url } from "inspector";
 const API_ENDPOINT_TODO = "http://localhost:5000/todos";
 export interface TodoState {
   id?: number;
@@ -12,10 +13,17 @@ const initialState = {
   status: "success",
   error: null,
 };
-export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
-  const response = await axios.get(`${API_ENDPOINT_TODO}`);
-  return response.data;
-});
+export const fetchTodos = createAsyncThunk(
+  "todos/fetchTodos",
+  async (completed?: boolean) => {
+    let url = API_ENDPOINT_TODO;
+    if (completed !== undefined) {
+      url = `${API_ENDPOINT_TODO}/?completed=${completed}`;
+    }
+    const response = await axios.get(url);
+    return response.data;
+  }
+);
 
 export const addNewTodo = createAsyncThunk(
   "todos/addNewTodo",
@@ -54,7 +62,6 @@ export const updateTodo = createAsyncThunk(
     );
 
     return response.data;
-    // console.log(newTodo);
   }
 );
 
@@ -88,8 +95,6 @@ export const todoSlice = createSlice({
       var index = state.todos.findIndex(
         (todo) => todo.id === action.payload.id
       );
-      console.log(action.payload.id);
-      console.log(index);
 
       state.todos[index].completed = action.payload.completed;
     },

@@ -60,13 +60,11 @@ export function Todo() {
           <Form form={form} layout="inline">
             <Form.Item
               name="title"
-              // validateStatus={formik.errors.title ? "error" : "validating"}
-              // rules={[
-              //   { required: true, message: "Please input your title!" },
-              //   { max: 10, message: "Title is too long" },
-              // ]}
+              validateStatus={formik.errors.title ? "error" : "validating"}
+              // rules={[formik.errors.title?.toString()]}
             >
               <Input
+                allowClear
                 onChange={formik.handleChange}
                 value={formik.values.title}
               />
@@ -105,12 +103,18 @@ export function Todo() {
                 }}
               >
                 <Checkbox
+                  checked={item.completed}
                   onClick={() => {
                     dispatch(updateTodo(item));
                   }}
                 />
-                <Typography>{item.title}</Typography>
-                <Typography>{item.completed}</Typography>
+                <Typography
+                  style={{
+                    textDecoration: item.completed ? "line-through" : "none",
+                  }}
+                >
+                  {item.title}
+                </Typography>
                 <Button type="primary">
                   <DeleteOutlined
                     color="red"
@@ -122,6 +126,35 @@ export function Todo() {
               </List.Item>
             )}
           />
+        </Row>
+        <Row
+          style={{
+            padding: "20px 0",
+            display: "inline-flex",
+          }}
+        >
+          Show:
+          <Button
+            onClick={() => {
+              dispatch(fetchTodos());
+            }}
+          >
+            All
+          </Button>
+          <Button
+            onClick={() => {
+              dispatch(fetchTodos(false));
+            }}
+          >
+            Active
+          </Button>
+          <Button
+            onClick={() => {
+              dispatch(fetchTodos(true));
+            }}
+          >
+            Completed
+          </Button>
         </Row>
       </Col>
     </Row>
