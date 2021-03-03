@@ -1,6 +1,6 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Todo } from "./features/counter/Todo";
+import { Todo } from "./features/todos/Todo";
 import "./App.css";
 import { Layout } from "antd";
 
