@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { url } from "inspector";
 const API_ENDPOINT_TODO = "http://localhost:5000/todos";
 export interface TodoState {
   id?: number;

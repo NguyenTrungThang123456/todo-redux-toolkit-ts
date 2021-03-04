@@ -23,7 +23,10 @@ import {
 import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
-  title: yup.string().max(10, "Title is too long").required(),
+  title: yup
+    .string()
+    .max(10, "Title is too long")
+    .required("Title is required"),
 });
 
 export function Todo() {
@@ -60,12 +63,21 @@ export function Todo() {
           <Form form={form} layout="inline">
             <Form.Item
               name="title"
-              validateStatus={formik.errors.title ? "error" : "validating"}
-              // rules={[formik.errors.title?.toString()]}
+              validateStatus={
+                formik.touched.title && formik.errors.title
+                  ? "error"
+                  : "validating"
+              }
+              help={
+                formik.touched.title && formik.errors.title
+                  ? formik.errors.title
+                  : ""
+              }
             >
               <Input
                 allowClear
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 value={formik.values.title}
               />
             </Form.Item>
