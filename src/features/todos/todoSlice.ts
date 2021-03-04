@@ -23,13 +23,6 @@ export const todoSlice = createSlice({
     );
 
     builder.addCase(
-      fetchTodos.rejected,
-      (state, action: PayloadAction<any>) => {
-        todosAdapter.upsertMany(state, []);
-      }
-    );
-
-    builder.addCase(
       addNewTodo.fulfilled.toString(),
       (state, action: PayloadAction<never>) => {
         todosAdapter.addOne(state, action.payload);
