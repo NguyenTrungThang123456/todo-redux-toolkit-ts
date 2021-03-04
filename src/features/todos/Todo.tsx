@@ -11,6 +11,7 @@ import {
   List,
   Checkbox,
   Typography,
+  Skeleton,
 } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { addNewTodo, deleteTodo, fetchTodos, Todo, updateTodo } from "./thunk";
@@ -126,7 +127,7 @@ export function Todos() {
               )}
             />
           ) : (
-            <h1>{status}</h1>
+            <Skeleton />
           )}
         </Row>
         <Row className={styles.filterButton}>

@@ -1,13 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import {
-  addNewTodo,
-  deleteTodo,
-  fetchTodos,
-  Todo,
-  FetchTodosError,
-  updateTodo,
-} from "./thunk";
+import { addNewTodo, deleteTodo, fetchTodos, Todo, updateTodo } from "./thunk";
 
 type TodoState = {
   todos: Todo[];

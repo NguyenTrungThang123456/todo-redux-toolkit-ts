@@ -7,13 +7,13 @@ export type Todo = {
   title?: string;
   completed?: boolean;
 };
-export type FetchTodosError = {
+export type Error = {
   message: string;
 };
 export const fetchTodos = createAsyncThunk<
   Todo[],
   boolean | null,
-  { rejectValue: FetchTodosError }
+  { rejectValue: Error }
 >("todos/fetchTodos", async (completed: boolean | null, thunkApi) => {
   let url = API_ENDPOINT_TODO;
   if (completed !== null) {
@@ -23,14 +23,14 @@ export const fetchTodos = createAsyncThunk<
 
   if (response.status !== 200) {
     return thunkApi.rejectWithValue({
-      message: "Failed to fetch todos.",
+      message: "Failed to fetch todos!",
     });
   }
 
   return response.data;
 });
 
-export const addNewTodo = createAsyncThunk(
+export const addNewTodo = createAsyncThunk<{}, Todo, { rejectValue: Error }>(
   "todos/addNewTodo",
   async (todo: Todo, thunkApi) => {
     const { title } = todo;
@@ -41,19 +41,30 @@ export const addNewTodo = createAsyncThunk(
     };
     const response = await axios.post(`${API_ENDPOINT_TODO}`, newTodo);
 
+    if (response.status !== 201) {
+      return thunkApi.rejectWithValue({
+        message: "Fail to add new todo!",
+      });
+    }
+
     return response.data;
   }
 );
 
-export const deleteTodo = createAsyncThunk(
+export const deleteTodo = createAsyncThunk<{}, number, { rejectValue: Error }>(
   "todos/deleteTodo",
   async (id: number, thunkApi) => {
-    await axios.delete(`${API_ENDPOINT_TODO}/${id}`);
+    let response = await axios.delete(`${API_ENDPOINT_TODO}/${id}`);
+    if (response.status !== 200) {
+      return thunkApi.rejectWithValue({
+        message: "Failed to delete todo!",
+      });
+    }
     return id;
   }
 );
 
-export const updateTodo = createAsyncThunk(
+export const updateTodo = createAsyncThunk<{}, Todo, { rejectValue: Error }>(
   "todos/updateTodo",
   async (todo: Todo, thunkApi) => {
     const newTodo: Todo = {
@@ -65,6 +76,12 @@ export const updateTodo = createAsyncThunk(
       `${API_ENDPOINT_TODO}/${todo.id}`,
       newTodo
     );
+
+    if (response.status !== 200) {
+      return thunkApi.rejectWithValue({
+        message: "Failed to update todo!",
+      });
+    }
 
     return response.data;
   }
