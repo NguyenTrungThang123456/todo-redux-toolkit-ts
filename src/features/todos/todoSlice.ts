@@ -45,7 +45,7 @@ export const todoSlice = createSlice({
 
     builder.addCase(
       updateTodo.fulfilled.toString(),
-      (state, action: PayloadAction<Todo>) => {
+      (state, action: PayloadAction<any>) => {
         const { id, ...changes } = action.payload;
         todosAdapter.updateOne(state, { id, changes });
       }
