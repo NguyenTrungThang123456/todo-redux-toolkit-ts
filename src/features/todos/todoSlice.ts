@@ -41,8 +41,9 @@ export const todoSlice = createSlice({
     builder.addCase(
       fetchTodos.rejected,
       (state, action: PayloadAction<any>) => {
-        state.error = action.payload.message;
+        // state.error = action.payload.message;
         state.status = "idle";
+        // console.log(action);
       }
     );
 

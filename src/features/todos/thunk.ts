@@ -1,6 +1,5 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { type } from "os";
 const API_ENDPOINT_TODO = "http://localhost:5000/todos";
 
 export type Todo = {
