@@ -44,9 +44,11 @@ export function Todos() {
       title: "",
       completed: false,
     },
+
     onReset: () => {
       form.resetFields();
     },
+
     onSubmit: (values: Todo, { resetForm }) => {
       dispatch(addNewTodo(values));
       resetForm();

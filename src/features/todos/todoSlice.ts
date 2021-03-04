@@ -67,6 +67,7 @@ export const todoSlice = createSlice({
     );
   },
 });
+
 export const selectAllTodos = (state: RootState) => state.todo.todos;
 export const selectStatus = (state: RootState) => state.todo.status;
 
