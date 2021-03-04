@@ -3,12 +3,12 @@
     {
       "id": 885,
       "title": "123",
-      "completed": false
+      "completed": true
     },
     {
       "id": 434,
       "title": "Post Three",
-      "completed": true
+      "completed": false
     }
   ]
 }

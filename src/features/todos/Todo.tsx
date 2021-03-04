@@ -11,11 +11,10 @@ import {
   List,
   Checkbox,
   Typography,
-  Skeleton,
 } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { addNewTodo, deleteTodo, fetchTodos, Todo, updateTodo } from "./thunk";
-import { selectAllTodos, selectStatus } from "./todoSlice";
+import { selectAll } from "./todoSlice";
 import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
@@ -33,8 +32,7 @@ export function Todos() {
     dispatch(fetchTodos(null));
   }, [dispatch]);
 
-  const todos: Todo[] = useSelector(selectAllTodos);
-  const status = useSelector(selectStatus);
+  const todos: Todo[] = useSelector(selectAll);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -53,6 +51,10 @@ export function Todos() {
       dispatch(addNewTodo(values));
       resetForm();
     },
+  });
+
+  useEffect(() => {
+    console.log(todos);
   });
 
   return (
@@ -92,45 +94,41 @@ export function Todos() {
           </Form>
         </Row>
         <Row className={styles.listTodo}>
-          {status === "idle" ? (
-            <List
-              style={{
-                width: "100%",
-              }}
-              size="large"
-              bordered
-              itemLayout="horizontal"
-              dataSource={todos}
-              renderItem={(item) => (
-                <List.Item className={styles.todo}>
-                  <Checkbox
-                    checked={item.completed}
+          <List
+            style={{
+              width: "100%",
+            }}
+            size="large"
+            bordered
+            itemLayout="horizontal"
+            dataSource={todos}
+            renderItem={(item) => (
+              <List.Item className={styles.todo}>
+                <Checkbox
+                  checked={item.completed}
+                  onClick={() => {
+                    dispatch(updateTodo(item));
+                  }}
+                />
+                <Typography.Paragraph
+                  type={item.completed ? "success" : "secondary"}
+                  style={{
+                    textDecoration: item.completed ? "line-through" : "none",
+                  }}
+                >
+                  {item.title}
+                </Typography.Paragraph>
+                <Button type="primary">
+                  <DeleteOutlined
+                    color="red"
                     onClick={() => {
-                      dispatch(updateTodo(item));
+                      dispatch(deleteTodo(item.id!));
                     }}
                   />
-                  <Typography.Paragraph
-                    type={item.completed ? "success" : "secondary"}
-                    style={{
-                      textDecoration: item.completed ? "line-through" : "none",
-                    }}
-                  >
-                    {item.title}
-                  </Typography.Paragraph>
-                  <Button type="primary">
-                    <DeleteOutlined
-                      color="red"
-                      onClick={() => {
-                        dispatch(deleteTodo(item.id!));
-                      }}
-                    />
-                  </Button>
-                </List.Item>
-              )}
-            />
-          ) : (
-            <Skeleton />
-          )}
+                </Button>
+              </List.Item>
+            )}
+          />
         </Row>
         <Row className={styles.filterButton}>
           Show:
