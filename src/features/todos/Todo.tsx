@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import styles from "./Todo.module.css";
 import * as yup from "yup";
 import {
   Row,
@@ -12,14 +13,8 @@ import {
   Typography,
 } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-import {
-  addNewTodo,
-  deleteTodo,
-  fetchTodos,
-  selectAllTodos,
-  TodoState,
-  updateTodo,
-} from "./todoSlice";
+import { addNewTodo, deleteTodo, fetchTodos, Todo, updateTodo } from "./thunk";
+import { selectAllTodos } from "./todoSlice";
 import { useFormik } from "formik";
 
 const validationSchema = yup.object().shape({
@@ -29,15 +24,15 @@ const validationSchema = yup.object().shape({
     .required("Title is required"),
 });
 
-export function Todo() {
+export function Todos() {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchTodos());
+    dispatch(fetchTodos(null));
   }, [dispatch]);
 
-  const todos: TodoState[] = useSelector(selectAllTodos);
+  const todos: Todo[] = useSelector(selectAllTodos);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -50,7 +45,7 @@ export function Todo() {
     onReset: () => {
       form.resetFields();
     },
-    onSubmit: (values: TodoState, { resetForm }) => {
+    onSubmit: (values: Todo, { resetForm }) => {
       dispatch(addNewTodo(values));
       resetForm();
     },
@@ -92,11 +87,7 @@ export function Todo() {
             </Form.Item>
           </Form>
         </Row>
-        <Row
-          style={{
-            marginTop: "20px",
-          }}
-        >
+        <Row className={styles.listTodo}>
           <List
             style={{
               width: "100%",
@@ -106,27 +97,21 @@ export function Todo() {
             itemLayout="horizontal"
             dataSource={todos}
             renderItem={(item) => (
-              <List.Item
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "end",
-                }}
-              >
+              <List.Item className={styles.todo}>
                 <Checkbox
                   checked={item.completed}
                   onClick={() => {
                     dispatch(updateTodo(item));
                   }}
                 />
-                <Typography
+                <Typography.Paragraph
+                  type={item.completed ? "success" : "secondary"}
                   style={{
                     textDecoration: item.completed ? "line-through" : "none",
                   }}
                 >
                   {item.title}
-                </Typography>
+                </Typography.Paragraph>
                 <Button type="primary">
                   <DeleteOutlined
                     color="red"
@@ -139,16 +124,11 @@ export function Todo() {
             )}
           />
         </Row>
-        <Row
-          style={{
-            padding: "20px 0",
-            display: "inline-flex",
-          }}
-        >
+        <Row className={styles.filterButton}>
           Show:
           <Button
             onClick={() => {
-              dispatch(fetchTodos());
+              dispatch(fetchTodos(null));
             }}
           >
             All
