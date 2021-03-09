@@ -3,9 +3,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 const API_ENDPOINT_TODO = "http://localhost:5000/todos";
 
 export type Todo = {
-  id?: number;
-  title?: string;
-  completed?: boolean;
+  id: number;
+  title: string;
+  completed: boolean;
 };
 
 export type Error = {
@@ -16,7 +16,7 @@ export const fetchTodos = createAsyncThunk<
   Todo[],
   boolean | null,
   { rejectValue: Error }
->("todos/fetchTodos", async (completed: boolean | null, thunkApi) => {
+>("todos/fetchTodos", async (completed, thunkApi) => {
   let url = API_ENDPOINT_TODO;
 
   if (completed !== null) {
@@ -34,9 +34,9 @@ export const fetchTodos = createAsyncThunk<
   return response.data;
 });
 
-export const addNewTodo = createAsyncThunk<null, Todo, { rejectValue: Error }>(
+export const addNewTodo = createAsyncThunk<Todo, Todo, { rejectValue: Error }>(
   "todos/addNewTodo",
-  async (todo: Todo, thunkApi) => {
+  async (todo, thunkApi) => {
     const { title } = todo;
 
     const newTodo: Todo = {
@@ -57,24 +57,26 @@ export const addNewTodo = createAsyncThunk<null, Todo, { rejectValue: Error }>(
   }
 );
 
-export const deleteTodo = createAsyncThunk<{}, number, { rejectValue: Error }>(
-  "todos/deleteTodo",
-  async (id: number, thunkApi) => {
-    let response = await axios.delete(`${API_ENDPOINT_TODO}/${id}`);
+export const deleteTodo = createAsyncThunk<
+  Todo,
+  number,
+  { rejectValue: Error }
+>("todos/deleteTodo", async (id, thunkApi) => {
+  let response = await axios.delete(`${API_ENDPOINT_TODO}/${id}`);
 
-    if (response.status !== 200) {
-      return thunkApi.rejectWithValue({
-        message: "Failed to delete todo!",
-      });
-    }
-
-    return id;
+  if (response.status !== 200) {
+    return thunkApi.rejectWithValue({
+      message: "Failed to delete todo!",
+    });
   }
-);
+  console.log(response.data);
 
-export const updateTodo = createAsyncThunk<null, Todo, { rejectValue: Error }>(
+  return response.data;
+});
+
+export const updateTodo = createAsyncThunk<Todo, Todo, { rejectValue: Error }>(
   "todos/updateTodo",
-  async (todo: Todo, thunkApi) => {
+  async (todo, thunkApi) => {
     const newTodo: Todo = {
       id: todo.id,
       title: todo.title,

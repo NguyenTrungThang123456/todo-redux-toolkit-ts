@@ -13,7 +13,13 @@ import {
   Typography,
 } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-import { addNewTodo, deleteTodo, fetchTodos, Todo, updateTodo } from "./thunk";
+import {
+  addNewTodo,
+  deleteTodo,
+  fetchTodos,
+  Todo,
+  updateTodo,
+} from "./services";
 import { selectAll } from "./todoSlice";
 import { useFormik } from "formik";
 

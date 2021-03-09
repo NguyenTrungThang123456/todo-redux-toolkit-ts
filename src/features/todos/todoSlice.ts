@@ -4,7 +4,13 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { addNewTodo, deleteTodo, fetchTodos, Todo, updateTodo } from "./thunk";
+import {
+  addNewTodo,
+  deleteTodo,
+  fetchTodos,
+  Todo,
+  updateTodo,
+} from "./services";
 
 export const todosAdapter = createEntityAdapter<Todo>();
 
@@ -17,14 +23,14 @@ export const todoSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       fetchTodos.fulfilled,
-      (state, action: PayloadAction<any>) => {
+      (state, action: PayloadAction<Todo[]>) => {
         todosAdapter.setAll(state, action.payload);
       }
     );
 
     builder.addCase(
       addNewTodo.fulfilled.toString(),
-      (state, action: PayloadAction<never>) => {
+      (state, action: PayloadAction<Todo>) => {
         todosAdapter.addOne(state, action.payload);
       }
     );
@@ -38,7 +44,7 @@ export const todoSlice = createSlice({
 
     builder.addCase(
       updateTodo.fulfilled.toString(),
-      (state, action: PayloadAction<any>) => {
+      (state, action: PayloadAction<Todo>) => {
         const { id, ...changes } = action.payload;
         todosAdapter.updateOne(state, { id, changes });
       }
