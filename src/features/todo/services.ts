@@ -58,7 +58,7 @@ export const addNewTodo = createAsyncThunk<Todo, Todo, { rejectValue: Error }>(
 );
 
 export const deleteTodo = createAsyncThunk<
-  Todo,
+  number,
   number,
   { rejectValue: Error }
 >("todos/deleteTodo", async (id, thunkApi) => {
@@ -69,9 +69,8 @@ export const deleteTodo = createAsyncThunk<
       message: "Failed to delete todo!",
     });
   }
-  console.log(response.data);
 
-  return response.data;
+  return id;
 });
 
 export const updateTodo = createAsyncThunk<Todo, Todo, { rejectValue: Error }>(

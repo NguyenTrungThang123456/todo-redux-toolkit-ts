@@ -59,10 +59,6 @@ export function Todos() {
     },
   });
 
-  useEffect(() => {
-    console.log(todos);
-  });
-
   return (
     <Row justify="center">
       <Col span={8}>
@@ -128,7 +124,7 @@ export function Todos() {
                   <DeleteOutlined
                     color="red"
                     onClick={() => {
-                      dispatch(deleteTodo(item.id!));
+                      dispatch(deleteTodo(item.id));
                     }}
                   />
                 </Button>
