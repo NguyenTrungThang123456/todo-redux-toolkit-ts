@@ -26,7 +26,7 @@ import { useFormik } from "formik";
 const validationSchema = yup.object().shape({
   title: yup
     .string()
-    .max(10, "Title is too long")
+    .max(10, "Title is so long")
     .required("Title is required"),
 });
 
